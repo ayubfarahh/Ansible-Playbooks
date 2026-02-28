@@ -1,0 +1,21 @@
+- hosts: localhost
+  connection: local
+  
+  tasks:
+  - name: start an instance with a public IP address
+    amazon.aws.ec2_instance:
+      name: "{{ item.name }}"
+      # key_name: "prod-ssh-key"
+      # vpc_subnet_id: subnet-013744e41e8088axx
+      instance_type: t2.micro
+      security_group: default
+      region: eu-west-2      
+      network:
+        assign_public_ip: true
+      image_id: "{{ item.image }}"
+      tags:
+        Environment: Testing
+    loop:
+      - { image: ami-0ba0c1a358147d1a8, name: "ansible-instance-1" }
+      - { image: ami-018ff7ece22bf96db, name: "ansible-instance-2" }
+      - { image: ami-018ff7ece22bf96db, name: "ansible-instance-3" }
